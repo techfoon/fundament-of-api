@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MainApp());
@@ -9,12 +12,40 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+    return MaterialApp(
+      home: GettingAPI(),
     );
+  }
+}
+
+class GettingAPI extends StatelessWidget {
+  void ApiGeter() async {
+    var url = Uri.parse("https://dummyjson.com/quotes");
+   var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+     log(response.body);
+    } else {
+      log("failed");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Center(
+          child: Column(
+          
+            mainAxisAlignment: MainAxisAlignment.center,
+            
+                children: [
+          ElevatedButton(
+              onPressed: () {
+                ApiGeter();
+              },
+              child: Text("print api"))
+                ],
+              ),
+        ));
   }
 }

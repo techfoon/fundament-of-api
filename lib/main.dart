@@ -26,8 +26,7 @@ class GettingAPI extends StatefulWidget {
 }
 
 class _GettingAPIState extends State<GettingAPI> {
-  DataModel? mData;
-
+  DataModel? apiData;
   @override
   void initState() {
     // TODO: implement initState
@@ -36,7 +35,7 @@ class _GettingAPIState extends State<GettingAPI> {
     ApiGeter();
   }
 
-  void ApiGeter() async {
+  Future<DataModel> ApiGeter() async {
     var url = Uri.parse("https://dummyjson.com/quotes");
     var response = await http.get(url);
 
@@ -45,34 +44,46 @@ class _GettingAPIState extends State<GettingAPI> {
 
       var resData = jsonDecode(response.body);
 
-      mData = DataModel.fromJson(resData); // model userd
+      apiData = DataModel.fromJson(resData); // model userd
 
-      setState(() {});
+      return apiData!;
     } else {
       log("failed");
+
+      return apiData!;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      
-      body:
-      
-      
-       mData !=null ?  ListView.builder(itemBuilder: (_, index) {
-      return ListTile(
-        title: Text(mData!.quotes[index].quote),
-        subtitle: Text(mData!.quotes[index].author),
-        
-      );
-
-      
-    },
-
-    itemCount: mData!.quotes.length,
-    
-    ):Container(child: Text("DAta is not available"),) 
+    return Scaffold(
+      body: FutureBuilder(
+          future: ApiGeter(),
+          builder: (context, Snapshot) {
+            if (Snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (Snapshot.hasError) {
+              return Center(
+                child: Text("Error  ${Snapshot.error.toString()}"),
+              );
+            } else if (Snapshot.hasData) {
+              return ListView.builder(
+                itemBuilder: (_, index) {
+                  return ListTile(
+                    title: Text(Snapshot.data!.quotes[index].quote),
+                    subtitle: Text(Snapshot.data!.quotes[index].author),
+                  );
+                },
+                itemCount: Snapshot.data!.quotes.length,
+              );
+            } else {
+              return Center(
+                child: Text("404"),
+              );
+            }
+          }),
     );
   }
 }

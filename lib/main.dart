@@ -57,7 +57,10 @@ class _GettingAPIState extends State<GettingAPI> {
   Widget build(BuildContext context) {
     return  Scaffold(
       
-      body: mData !=null ?  ListView.builder(itemBuilder: (_, index) {
+      body:
+      
+      
+       mData !=null ?  ListView.builder(itemBuilder: (_, index) {
       return ListTile(
         title: Text(mData!.quotes[index].quote),
         subtitle: Text(mData!.quotes[index].author),
@@ -69,7 +72,7 @@ class _GettingAPIState extends State<GettingAPI> {
 
     itemCount: mData!.quotes.length,
     
-    ):Container(child: Text("DAta is not available"),)
+    ):Container(child: Text("DAta is not available"),) 
     );
   }
 }

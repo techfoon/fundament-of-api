@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:fundamental_of_api/Models/qoute_Model.dart';
+import 'package:fundamental_of_api/Models/product_Model.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
@@ -25,6 +25,8 @@ class GettingAPI extends StatefulWidget {
 }
 
 class _GettingAPIState extends State<GettingAPI> {
+
+
   DataModel? apiData;
   @override
   void initState() {
@@ -35,7 +37,7 @@ class _GettingAPIState extends State<GettingAPI> {
   }
 
   Future<DataModel> ApiGeter() async {
-    var url = Uri.parse("https://dummyjson.com/posts");
+    var url = Uri.parse("https://dummyjson.com/products");
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -69,6 +71,66 @@ class _GettingAPIState extends State<GettingAPI> {
               );
             } else if (Snapshot.hasData) {
               return ListView.builder(
+                itemCount: Snapshot.data!.products!.length,
+                itemBuilder: (context, index) {
+                  ;
+                  return Card(
+                    margin: const EdgeInsets.all(10),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "title: ${Snapshot.data!.products![index].title}",
+                            style: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10),
+                          Text("description : ${Snapshot.data!.products![index].description}"),
+                          const SizedBox(height: 10),
+                          Text("Brand:${Snapshot.data!.products![index].brand}}"),
+                          Text("Category: ${Snapshot.data!.products![index].category}"),
+                          Text("Price: \$${Snapshot.data!.products![index].price}"),
+                          Text(
+                              "Discount: ${Snapshot.data!.products![index].discountPercentage}%"),
+                          Text(
+                              "Status: ${Snapshot.data!.products![index].availabilityStatus}"),
+                          Text("SKU: ${"sku"}"),
+                          Text("Stock: ${"stock"}"),
+                          Text(
+                              "Minimum Order Quantity: ${Snapshot.data!.products![index].minimumOrderQuantity}"),
+                          const SizedBox(height: 10),
+                          Image.network(Snapshot.data!.products![index].images![0]),
+                          const SizedBox(height: 10),
+                          Text("Rating: ${Snapshot.data!.products![index].rating} stars"),
+                          Text(
+                              "Reviews: ${Snapshot.data!.products![index].reviews} reviews"),
+                          Text(
+                              "Return Policy: ${Snapshot.data!.products![index].returnPolicy}"),
+                          Text(
+                              "Shipping Information: ${Snapshot.data!.products![index].shippingInformation}"),
+                          Text("Dimensions: ${Snapshot.data!.products![index].dimensions!.height.toString()}  and ${Snapshot.data!.products![index].dimensions!.depth.toString()}"),
+                          Text("Weight: ${Snapshot.data!.products![index].weight}"),
+                          Text(
+                              "Warranty Information: ${Snapshot.data!.products![index].warrantyInformation}"),
+                          const SizedBox(height: 10),
+                          Wrap(
+                            children: Snapshot.data!.products![index].tags!
+                                .map<Widget>((tag) => Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Chip(label: Text(tag)),
+                                    ))
+                                .toList(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+
+              /* ListView.builder(
                 itemBuilder: (_, index) {
                   return ListTile(
                  //   trailing: ,
@@ -80,9 +142,8 @@ class _GettingAPIState extends State<GettingAPI> {
                   );
                 },
                 itemCount: Snapshot.data!.posts!.length,
-              );
-            } 
-            else {
+              );*/
+            } else {
               return Center(
                 child: Text("404"),
               );

@@ -1,53 +1,70 @@
-import 'dart:convert';
+import 'dart:developer';
 
-class QuoteModel {
-  int id;
+class ReactionModel {
+  int? likes;
+  int? dislikes;
 
-  String quote;
+  ReactionModel({this.dislikes, this.likes});
 
-  String author;
-
-  QuoteModel({required this.id, required this.quote, required this.author});
-
-  factory QuoteModel.fromJson(Map<String, dynamic> json) // Map(JSON)->Model
-  {
-    return QuoteModel(
-        id: json['id'], quote: json['quote'], author: json['author']);
+  factory ReactionModel.fromJson(Map<String, dynamic> Json) {
+    return ReactionModel(dislikes: Json['dislikes'], likes: Json['likes']);
   }
+}
 
-  /* Factory void toMap()  Model-> Map(Json)
-  {
+class PostModel {
+  int? id;
+  String? body;
+  String? title;
+  ReactionModel? reactions;
+  List<dynamic>? tags;
+  int? userId;
+  int? views;
 
+  PostModel(
+      {this.id,
+      this.title,
+      this.body,
+      this.tags,
+      this.userId,
+      this.views,
+      this.reactions});
 
-  }*/
+  factory PostModel.fromJson(Map<String, dynamic> Json) {
+    log("${Json['reactions'].runtimeType}");
+
+    ReactionModel eachSinglereactions =
+        ReactionModel.fromJson(Json['reactions']);  // loop Not required here why? doubt
+
+    return PostModel(
+        id: Json['id'],
+        title: Json['title'],
+        body: Json['body'],
+        tags: Json['tags'],
+        userId: Json['userId'],
+        views: Json['views'],
+        reactions: eachSinglereactions);
+  }
 }
 
 class DataModel {
-  int total, skip, limit;
+  int? limit, skip, total;
 
-  List<QuoteModel> quotes;
+  List<PostModel>? posts = [];
 
-  DataModel(
-      {required this.total,
-      required this.skip,
-      required this.limit,
-      required this.quotes});
+  DataModel({this.limit, this.skip, this.total, this.posts});
 
-  factory DataModel.fromJson(Map<String, dynamic> DataModelJson) {
-    List<QuoteModel> mQuotes=[];
+  factory DataModel.fromJson(Map<String, dynamic> Json) {
+    List<PostModel> mposts = [];
 
-    for (Map<String, dynamic> eachQyote in DataModelJson['quotes']) {
-      var eachQuoteModel = QuoteModel.fromJson(eachQyote);
+    for (Map<String, dynamic> Singledata in Json['posts']) {
+      var eachSingledata = PostModel.fromJson(Singledata);
 
-      mQuotes.add(eachQuoteModel);
+      mposts.add(eachSingledata);
     }
-
     return DataModel(
-        total: DataModelJson['total'],
-        skip: DataModelJson['skip'],
-        limit: DataModelJson['limit'],
-        quotes: mQuotes);
-
-    ///conversion
+        limit: Json['limit'],
+        skip: Json['skip'],
+        total: Json['total'],
+        posts: mposts);
   }
 }

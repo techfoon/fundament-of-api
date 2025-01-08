@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:fundamental_of_api/Models/qoute_Model.dart';
 import 'package:http/http.dart' as http;
@@ -36,7 +35,7 @@ class _GettingAPIState extends State<GettingAPI> {
   }
 
   Future<DataModel> ApiGeter() async {
-    var url = Uri.parse("https://dummyjson.com/quotes");
+    var url = Uri.parse("https://dummyjson.com/posts");
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -72,13 +71,18 @@ class _GettingAPIState extends State<GettingAPI> {
               return ListView.builder(
                 itemBuilder: (_, index) {
                   return ListTile(
-                    title: Text(Snapshot.data!.quotes[index].quote),
-                    subtitle: Text(Snapshot.data!.quotes[index].author),
+                 //   trailing: ,
+                    title: Text("${Snapshot.data!.posts![index].id.toString()} : ${Snapshot.data!.posts![index].title}"),
+                 subtitle: Text("Tag: ${Snapshot.data!.posts![index].tags}  Likes : ${Snapshot.data!.posts![index].reactions!.likes}  DisLikes : ${Snapshot.data!.posts![index].reactions!.dislikes}"),  // consern
+               //     leading: Text(),
+
+                    
                   );
                 },
-                itemCount: Snapshot.data!.quotes.length,
+                itemCount: Snapshot.data!.posts!.length,
               );
-            } else {
+            } 
+            else {
               return Center(
                 child: Text("404"),
               );

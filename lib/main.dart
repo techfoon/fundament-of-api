@@ -105,7 +105,7 @@ class _GettingAPIState extends State<GettingAPI> {
                           const SizedBox(height: 10),
                           Text("Rating: ${Snapshot.data!.products![index].rating} stars"),
                           Text(
-                              "Reviews: ${Snapshot.data!.products![index].reviews} reviews"),
+                              "Reviews: ${Snapshot.data!.products![index].reviews![index].rating} reviews"),
                           Text(
                               "Return Policy: ${Snapshot.data!.products![index].returnPolicy}"),
                           Text(

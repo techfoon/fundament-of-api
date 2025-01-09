@@ -57,7 +57,7 @@ class ProductModel {
 
   String? returnPolicy;
 
-  List<dynamic>? reviews;
+  List<ReviewModel>? reviews;
 
   /// Dimanic arrya ------------------
 
@@ -104,6 +104,14 @@ class ProductModel {
       this.weight});
 
   factory ProductModel.fromJson(Map<String, dynamic> JSION) {
+ List<ReviewModel> mReviews=[];
+
+    for (Map<String, dynamic> singleRiviews in JSION['reviews']) {
+      ReviewModel SingleData = ReviewModel.fromJson(singleRiviews);
+
+      mReviews.add(SingleData);
+    }
+
     return ProductModel(
       availabilityStatus: JSION['availabilityStatus'],
       brand: JSION['brand'],
@@ -120,7 +128,7 @@ class ProductModel {
       price: JSION['price'],
       rating: JSION['rating'],
       returnPolicy: JSION['returnPolicy'],
-      reviews: JSION['reviews'],
+      reviews:mReviews,  // sorted they are   collection of map
       shippingInformation: JSION['shippingInformation'],
       sku: JSION['sku'],
       stock: JSION['stock'],
@@ -129,6 +137,35 @@ class ProductModel {
       title: JSION['title'],
       warrantyInformation: JSION['warrantyInformation'],
       weight: JSION['weight'],
+    );
+  }
+}
+
+class ReviewModel {
+  String? comment;
+
+ String? date;
+
+ int? rating;
+
+  String? reviewerEmail;
+
+  String? reviewerName;
+
+  ReviewModel(
+      {this.comment,
+      this.date,
+      this.rating,
+      this.reviewerEmail,
+      this.reviewerName});
+
+  factory ReviewModel.fromJson(Map<String, dynamic> JSON) {
+    return ReviewModel(
+      comment: JSON['comment'],
+      date: JSON['date'],
+      rating: JSON['rating'],
+      reviewerEmail: JSON['reviewerEmail'],
+      reviewerName: JSON['reviewerName'],
     );
   }
 }
@@ -143,7 +180,7 @@ class DimensionsModel {
   factory DimensionsModel.fromJson(Map<String, dynamic> JSION) {
     return DimensionsModel(
       depth: JSION['depth'],
-      height: JSION['height'], //     ----------------- p1
+      // height: JSION['height'], //     ----------------- p1
       //     width: JSION['width'],                     //     ----------------- p2
     );
   }
